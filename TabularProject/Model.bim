@@ -1,0 +1,647 @@
+{
+  "name": "SemanticModel",
+  "compatibilityLevel": 1500,
+  "model": {
+    "culture": "en-US",
+    "dataSources": [
+      {
+        "type": "structured",
+        "name": "SQL/DESKTOP-R6LFB3P;DWH_VENTAS",
+        "connectionDetails": {
+          "protocol": "tds",
+          "address": {
+            "server": "DESKTOP-R6LFB3P",
+            "database": "DWH_VENTAS"
+          },
+          "authentication": null,
+          "query": null
+        },
+        "credential": {
+          "AuthenticationKind": "UsernamePassword",
+          "kind": "SQL",
+          "path": "desktop-r6lfb3p;DWH_VENTAS",
+          "Username": "sa",
+          "EncryptConnection": false
+        }
+      }
+    ],
+    "tables": [
+      {
+        "name": "Divisa",
+        "columns": [
+          {
+            "name": "ID_DIVISA",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "ID_DIVISA"
+          },
+          {
+            "name": "CODIGO_DIVISA",
+            "dataType": "string",
+            "sourceColumn": "CODIGO_DIVISA"
+          },
+          {
+            "name": "NOMBRE_DIVISA",
+            "dataType": "string",
+            "sourceColumn": "NOMBRE_DIVISA"
+          },
+          {
+            "name": "VALOR",
+            "dataType": "decimal",
+            "sourceColumn": "VALOR"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/DESKTOP-R6LFB3P;DWH_VENTAS\",",
+                "    dbo_DIM_DIVISA = Source{[Schema=\"dbo\",Item=\"DIM_DIVISA\"]}[Data]",
+                "in",
+                "    dbo_DIM_DIVISA"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Clientes",
+        "columns": [
+          {
+            "name": "ID_CLIENTE",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "ID_CLIENTE"
+          },
+          {
+            "name": "NOMBRE",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "NOMBRE"
+          },
+          {
+            "name": "APELLIDO",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "APELLIDO"
+          },
+          {
+            "name": "FECHA_NACIMIENTO",
+            "dataType": "dateTime",
+            "isHidden": true,
+            "sourceColumn": "FECHA_NACIMIENTO"
+          },
+          {
+            "name": "ESTADO_CIVIL",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "ESTADO_CIVIL"
+          },
+          {
+            "name": "GENERO",
+            "dataType": "string",
+            "sourceColumn": "GENERO"
+          },
+          {
+            "name": "CORREO",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "CORREO"
+          },
+          {
+            "name": "INGRESOS_ANUALES",
+            "dataType": "int64",
+            "sourceColumn": "INGRESOS_ANUALES"
+          },
+          {
+            "name": "EDUCACION",
+            "dataType": "string",
+            "sourceColumn": "EDUCACION"
+          },
+          {
+            "name": "OCUPACION",
+            "dataType": "string",
+            "sourceColumn": "OCUPACION"
+          },
+          {
+            "name": "CIUDAD",
+            "dataType": "string",
+            "sourceColumn": "CIUDAD"
+          },
+          {
+            "name": "PROVINCIA",
+            "dataType": "string",
+            "sourceColumn": "PROVINCIA"
+          },
+          {
+            "name": "PAIS",
+            "dataType": "string",
+            "sourceColumn": "PAIS"
+          },
+          {
+            "type": "calculated",
+            "name": "Nombre de Cliente",
+            "dataType": "string",
+            "isDataTypeInferred": true,
+            "expression": "Clientes[NOMBRE] & \" \" & Clientes[APELLIDO]"
+          },
+          {
+            "type": "calculated",
+            "name": "Estado Civil",
+            "dataType": "string",
+            "isDataTypeInferred": true,
+            "expression": "IF(Clientes[ESTADO_CIVIL] =\"M\", \"Casado\",\"Soltero\")"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/DESKTOP-R6LFB3P;DWH_VENTAS\",",
+                "    dbo_DIM_CLIENTE = Source{[Schema=\"dbo\",Item=\"DIM_CLIENTE\"]}[Data]",
+                "in",
+                "    dbo_DIM_CLIENTE"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Fecha",
+        "dataCategory": "Time",
+        "columns": [
+          {
+            "name": "ID_FECHA",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "ID_FECHA"
+          },
+          {
+            "name": "FECHA",
+            "dataType": "dateTime",
+            "isKey": true,
+            "sourceColumn": "FECHA"
+          },
+          {
+            "name": "NUM_DIA_SEMANA",
+            "dataType": "int64",
+            "sourceColumn": "NUM_DIA_SEMANA"
+          },
+          {
+            "name": "NUM_DIA_MES",
+            "dataType": "int64",
+            "sourceColumn": "NUM_DIA_MES"
+          },
+          {
+            "name": "NUM_MES",
+            "dataType": "int64",
+            "sourceColumn": "NUM_MES"
+          },
+          {
+            "name": "ANIO",
+            "dataType": "int64",
+            "sourceColumn": "ANIO"
+          },
+          {
+            "type": "calculated",
+            "name": "Dia",
+            "dataType": "string",
+            "isDataTypeInferred": true,
+            "expression": "FORMAT(Fecha[FECHA],\"yyyy-MM-dd\")"
+          },
+          {
+            "type": "calculated",
+            "name": "Mes",
+            "dataType": "string",
+            "isDataTypeInferred": true,
+            "expression": "FORMAT(Fecha[FECHA],\"yyyy-MM\")"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/DESKTOP-R6LFB3P;DWH_VENTAS\",",
+                "    dbo_DIM_FECHA = Source{[Schema=\"dbo\",Item=\"DIM_FECHA\"]}[Data]",
+                "in",
+                "    dbo_DIM_FECHA"
+              ]
+            }
+          }
+        ],
+        "hierarchies": [
+          {
+            "name": "J_Fecha",
+            "levels": [
+              {
+                "name": "ANIO",
+                "ordinal": 0,
+                "column": "ANIO"
+              },
+              {
+                "name": "Mes",
+                "ordinal": 1,
+                "column": "Mes"
+              },
+              {
+                "name": "Dia",
+                "ordinal": 2,
+                "column": "Dia"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "TerritorioVenta",
+        "columns": [
+          {
+            "name": "ID_VENTA_TERRITORIO",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "ID_VENTA_TERRITORIO"
+          },
+          {
+            "name": "PAIS",
+            "dataType": "string",
+            "sourceColumn": "PAIS"
+          },
+          {
+            "name": "REGION",
+            "dataType": "string",
+            "sourceColumn": "REGION"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/DESKTOP-R6LFB3P;DWH_VENTAS\",",
+                "    dbo_DIM_TERRITORIO_VENTA = Source{[Schema=\"dbo\",Item=\"DIM_TERRITORIO_VENTA\"]}[Data]",
+                "in",
+                "    dbo_DIM_TERRITORIO_VENTA"
+              ]
+            }
+          }
+        ],
+        "hierarchies": [
+          {
+            "name": "J_Territorio",
+            "levels": [
+              {
+                "name": "REGION",
+                "ordinal": 0,
+                "column": "REGION"
+              },
+              {
+                "name": "PAIS",
+                "ordinal": 1,
+                "column": "PAIS"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Medidas",
+        "columns": [
+          {
+            "name": "ID_PRODUCTO",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "ID_PRODUCTO"
+          },
+          {
+            "name": "ID_FECHA_PEDIDO",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "ID_FECHA_PEDIDO"
+          },
+          {
+            "name": "ID_FECHA_ENVIO",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "ID_FECHA_ENVIO"
+          },
+          {
+            "name": "ID_CLIENTE",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "ID_CLIENTE"
+          },
+          {
+            "name": "ID_DIVISA",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "ID_DIVISA"
+          },
+          {
+            "name": "ID_TERRITORIO_VENTA",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "ID_TERRITORIO_VENTA"
+          },
+          {
+            "name": "NUM_ORDEN_VENTA",
+            "dataType": "string",
+            "sourceColumn": "NUM_ORDEN_VENTA"
+          },
+          {
+            "name": "NUM_LINEA_ORDEN_VENTA",
+            "dataType": "int64",
+            "sourceColumn": "NUM_LINEA_ORDEN_VENTA"
+          },
+          {
+            "name": "CANTIDAD",
+            "dataType": "int64",
+            "sourceColumn": "CANTIDAD"
+          },
+          {
+            "name": "PRECIO_UNITARIO",
+            "dataType": "decimal",
+            "sourceColumn": "PRECIO_UNITARIO"
+          },
+          {
+            "name": "COSTO_UNITARIO",
+            "dataType": "decimal",
+            "sourceColumn": "COSTO_UNITARIO"
+          },
+          {
+            "type": "calculated",
+            "name": "MontoVenta",
+            "dataType": "decimal",
+            "isDataTypeInferred": true,
+            "expression": "Medidas[CANTIDAD] * Medidas[COSTO_UNITARIO]",
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/DESKTOP-R6LFB3P;DWH_VENTAS\",",
+                "    dbo_TH_VENTAS = Source{[Schema=\"dbo\",Item=\"TH_VENTAS\"]}[Data]",
+                "in",
+                "    dbo_TH_VENTAS"
+              ]
+            }
+          }
+        ],
+        "measures": [
+          {
+            "name": "Total Precio unitario",
+            "expression": "SUM([PRECIO_UNITARIO])",
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Monto Total DAX",
+            "expression": " SUMX(Medidas,Medidas[CANTIDAD]* Medidas[PRECIO_UNITARIO])",
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "kpi": {
+              "targetExpression": "'Medidas'[Venta bruta objetivo]",
+              "targetFormatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+              "statusGraphic": "Three Symbols UnCircled Colored",
+              "statusExpression": [
+                "var x='Medidas'[Monto Total DAX]/'Medidas'[_Monto Total DAX Goal] return",
+                "            if(ISBLANK(x),BLANK(),",
+                "                    If(x<0.35,-1,",
+                "\t                If(x<0.75,0,1)",
+                "                )",
+                "            )",
+                "            "
+              ],
+              "annotations": [
+                {
+                  "name": "GoalType",
+                  "value": "Measure"
+                },
+                {
+                  "name": "KpiStatusType",
+                  "value": "Linear"
+                },
+                {
+                  "name": "KpiThresholdType",
+                  "value": "Percentage"
+                },
+                {
+                  "name": "KpiThresholdOrdering",
+                  "value": "Ascending"
+                },
+                {
+                  "name": "KpiThresholdCount",
+                  "value": "2"
+                },
+                {
+                  "name": "KpiThreshold_0",
+                  "value": "35"
+                },
+                {
+                  "name": "KpiThreshold_1",
+                  "value": "75"
+                }
+              ]
+            },
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Cantidad Ventas",
+            "expression": "sum(Medidas[CANTIDAD])",
+            "formatString": "0.00"
+          },
+          {
+            "name": "Venta bruta acumulado mensual",
+            "expression": "TOTALMTD([Monto Total DAX],Fecha[FECHA])",
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Venta bruta LY",
+            "expression": "CALCULATE([Monto Total DAX],SAMEPERIODLASTYEAR(Fecha[FECHA]))",
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Venta mes anterior",
+            "expression": "CALCULATE([Monto Total DAX],DATEADD(Fecha[FECHA],-1,MONTH))",
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Venta bruta objetivo",
+            "expression": "CALCULATE([Monto Total DAX],SAMEPERIODLASTYEAR(Fecha[FECHA]))*1.20",
+            "formatString": "\\$#,0.00;(\\$#,0.00);\\$#,0.00",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\"><Currency LCID=\"1033\" DisplayName=\"$ English (United States)\" Symbol=\"$\" PositivePattern=\"0\" NegativePattern=\"0\" /></Format>"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Productos",
+        "columns": [
+          {
+            "name": "ID_PRODUCTO",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "ID_PRODUCTO"
+          },
+          {
+            "name": "NOMBRE_PRODUCTO",
+            "dataType": "string",
+            "sourceColumn": "NOMBRE_PRODUCTO"
+          },
+          {
+            "name": "MARCA",
+            "dataType": "string",
+            "sourceColumn": "MARCA"
+          },
+          {
+            "name": "MODELO",
+            "dataType": "string",
+            "sourceColumn": "MODELO"
+          },
+          {
+            "name": "NOMBRE_PROD_SUBCATEGORIA",
+            "dataType": "string",
+            "sourceColumn": "NOMBRE_PROD_SUBCATEGORIA"
+          },
+          {
+            "name": "NOMBRE_PROD_CATEGORIA",
+            "dataType": "string",
+            "sourceColumn": "NOMBRE_PROD_CATEGORIA"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/DESKTOP-R6LFB3P;DWH_VENTAS\",",
+                "    dbo_DIM_PRODUCTOS = Source{[Schema=\"dbo\",Item=\"DIM_PRODUCTOS\"]}[Data]",
+                "in",
+                "    dbo_DIM_PRODUCTOS"
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "relationships": [
+      {
+        "name": "16b66bea-4e8d-4923-82db-7969941d9609",
+        "fromTable": "Medidas",
+        "fromColumn": "ID_CLIENTE",
+        "toTable": "Clientes",
+        "toColumn": "ID_CLIENTE"
+      },
+      {
+        "name": "fe573364-bb58-4e01-8502-cf8260cef4e2",
+        "fromTable": "Medidas",
+        "fromColumn": "ID_DIVISA",
+        "toTable": "Divisa",
+        "toColumn": "ID_DIVISA"
+      },
+      {
+        "name": "fe6008dc-d323-4151-999f-acbcc4d447e9",
+        "fromTable": "Medidas",
+        "fromColumn": "ID_FECHA_PEDIDO",
+        "toTable": "Fecha",
+        "toColumn": "ID_FECHA"
+      },
+      {
+        "name": "aa911976-c4cb-46fb-92c8-398d1036701b",
+        "fromTable": "Medidas",
+        "fromColumn": "ID_TERRITORIO_VENTA",
+        "toTable": "TerritorioVenta",
+        "toColumn": "ID_VENTA_TERRITORIO"
+      },
+      {
+        "name": "c57671ef-483c-4eaf-a7f0-46afb3b667be",
+        "fromTable": "Medidas",
+        "fromColumn": "ID_PRODUCTO",
+        "toTable": "Productos",
+        "toColumn": "ID_PRODUCTO"
+      }
+    ],
+    "perspectives": [
+      {
+        "name": "Ventas Ciudadd",
+        "tables": [
+          {
+            "name": "Clientes",
+            "columns": [
+              {
+                "name": "PROVINCIA"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "annotations": [
+      {
+        "name": "ClientCompatibilityLevel",
+        "value": "600"
+      }
+    ]
+  },
+  "id": "SemanticModel"
+}
